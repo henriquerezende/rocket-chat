@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  rocketchat_one:
+    container_name: rocketchat_one
+    image: rocket.chat:5.1.5
+    command: >
+      bash -c
+        "for i in `seq 1 30`; do
+          node main.js &&
+          s=$$? && break || s=$$?;
+          echo \"Tried $$i times. Waiting 5 secs...\";
+          sleep 5;
+        done; (exit $$s)"
+    restart: unless-stopped
+    volumes:
+      - ./uploads:/app/uploads
+    environment:
+      - PORT=3000
+    ports:
+      - 3000:3000
+  nginx:
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - rocketchat_one
+    build:
+      context: ./nginx/
