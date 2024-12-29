@@ -3,7 +3,7 @@ version: '3'
 services:
   rocketchat_one:
     container_name: rocketchat_one
-    image: rocket.chat:5.1.5
+    image: rocket.chat:6.3.7
     command: >
       bash -c
         "for i in `seq 1 30`; do
